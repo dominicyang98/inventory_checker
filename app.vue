@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <input type="button" value="+" @click="changeclick"> 
-    <input type="text" v-model="inputID" placeholder="Enter ID" ref="input">
+    <!-- <input type="text" v-model="inputID" placeholder="Enter ID" ref="input"> -->
     <input type="button" value="submit" @click="idsubmit">
     <span>{{ counter }}</span>
   </div>
-
+  <!--
   <div>
     <button @click="addDigit(1)"> 1 </button>
     <button @click="addDigit(2)"> 2 </button>
@@ -20,8 +20,23 @@
     <button @click="clearInput"> del </button>
     <button @click="clearAllInput"> del all </button>
   </div>
+  -->
 
-  <div>
+    <div class="container">
+        <div class="input-container">
+            <input ref="input" class="input" type="text" v-model="inputID" placeholder="Enter ID" />
+            <div class="clear-btn-container">
+                <button class="clear-btn" @click="clearAllInput">clear all</button>
+                <button class="clear-btn" @click="clearInput">clear</button>
+            </div>
+        </div>
+        <div class="digit-panel">
+            <button class="digit" v-for="digit in digits" :key="digit" @click="addDigit(digit)">{{ digit }}</button>
+        </div>
+    </div>
+
+
+    <div>
     <h3> Items: </h3>
     <div v-for = "item in showdata" :key="showdata.id" class="item">
       <p>ID: {{ item.id }}</p>
@@ -45,6 +60,7 @@ import JSONdata from "./inventory-details.json"
         counter:0,
         showdata:"",
         inputID:"",
+        digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
       }
     },
 
@@ -59,7 +75,7 @@ import JSONdata from "./inventory-details.json"
 
       addDigit(digit){
         this.$refs.input.focus();
-        this.inputID += digit;
+        this.inputID += digit.toString();
       },
 
       clearInput() {
@@ -104,5 +120,48 @@ import JSONdata from "./inventory-details.json"
   background-color: rgba(242, 242, 242, 0.7);
   padding: 5px;
   margin-bottom: 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.input {
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.clear-btn:hover {
+    background-color: #d32f2f;
+}
+
+.clear-btn-container {
+    display: flex;
+    align-items: center;
+}
+
+.clear-btn {
+    margin-left: 8px;
+}
+
+.digit-panel {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.digit {
+    flex: 1 0 calc(33.33% - 10px);
+    margin: 5px;
+    text-align: center;
 }
 </style>
