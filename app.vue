@@ -1,85 +1,117 @@
 <template>
-    <div id="app">
-        <!-- <input type="button" value="+" @click="changeclick"> -->
-        <!-- <input type="text" v-model="inputID" placeholder="Enter ID" ref="input"> -->
-        <!--<span>{{ counter }}</span>-->
+    <div id="header" style="background-color:lightblue; text-align:center">Inventory Management</div>
+    <div id="reader" width="400px"></div>
 
+    <div class="basecontainer">
+      <div class="input-container">
+          <input ref="input" class="input" type="tel" v-model="inputID" placeholder="Enter ID" />
+      </div>
     </div>
-    <div class="input-container">
-        <input ref="input" class="input" type="tel" v-model="inputID" placeholder="Enter ID" />
+
+    <div class="basecontainer">
+      <div class="container">
+          <div class="digit-panel">
+              <button class="digit" v-for="digit in digits" :key="digit" @click="addDigit(digit)">{{ digit }}</button>
+          </div>
+      </div>
     </div>
-    <div class="container">
-        <div class="digit-panel">
-            <button class="digit" v-for="digit in digits" :key="digit" @click="addDigit(digit)">{{ digit }}</button>
+
+    <div class="basecontainer">
+      <div>
+        <div v-for = "item in showdata" :key="showdata.id" class="item">
+          <p>ID: {{ item.id }}</p>
+          <p>Category: {{ item.Category }}</p>
+          <p>Location: {{ item.Location }}</p>
+          <p>Manufacturer: {{ item.Manufacturer }}</p>
+          <p>Status: {{ item.Status }}</p>
+          <p>Model: {{ item.Model }}</p>
+          <p>Age: {{ itemAge(item.age) }}</p>
         </div>
+      </div>
     </div>
-
-    <div>
-    <h3> Items: </h3>
-    <div v-for = "item in showdata" :key="showdata.id" class="item">
-      <p>ID: {{ item.id }}</p>
-      <p>Category: {{ item.Category }}</p>
-      <p>Location: {{ item.Location }}</p>
-      <p>Manufacturer: {{ item.Manufacturer }}</p>
-      <p>Status: {{ item.Status }}</p>
-      <p>Model: {{ item.Model }}</p>
-      <p>Age: {{ itemAge(item.age) }}</p>
-    </div>
-  </div>
 
 </template>
 
 <script>
-
+import {Html5QrcodeScanner} from "html5-qrcode";
 import JSONdata from "./inventory-details.json"
-  export default{
-    data(){
-      return{
-        counter:0,
-        showdata:"",
-        inputID:"",
-        digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 'clear', 0, 'clear all', 'submit']
-      }
-    },
 
-    methods:{
-      addDigit(digit){
-        this.$refs.input.focus();
-        if (digit === 'clear') {
-            this.inputID = this.inputID.slice(0, -1);
-        } else if (digit === 'clear all') {
-            this.inputID = '';
-        } else if (digit === 'submit'){
-            if (this.inputID === "") {
-                alert('Please enter the ID.')
-            } else {
-                this.showdata = JSONdata.data.filter(item => item.id.toUpperCase().includes(this.inputID));
-            }
-        } else {
-            this.inputID += digit.toString();
-        }
-      },
-
-    },
-
-    computed:{
-      itemAge(){
-        return (age) => {
-          if (age >= 12) {
-            const years = Math.floor(age / 12)
-            const months = age % 12
-            if (months !== 0){
-              return `${years}y${months}m`
-            }else{
-              return `${years}y`}
-          }else {
-            return `${age}m ${age > 1 ? 's': ''}`
-          }
-        }
-      }
-
+function onScanSuccess(decodedText, decodedResult) {
+    // handle the scanned code as you like, for example:
+    if (!consoleOutput[message]) {
+        message = decodedResult;
+        consoleOutput[message] = true;
+        console.log(message)
+        //console.log(`Code matched = ${decodedText}`, message);
     }
+}
+
+function onScanFailure(error) {
+    // handle scan failure, usually better to ignore and keep scanning.
+    // for example:
+    console.warn(`Code scan error = ${error}`);
+}
+
+export default (await import('vue')).defineComponent({
+  data(){
+    return{
+      showdata:"",
+      inputID:"",
+      digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 'clear', 0, 'clear all', 'submit']
+    }
+  },
+
+  mounted() {
+      if (process.client) {
+          let html5QrcodeScanner = new Html5QrcodeScanner(
+              "reader",
+              {fps: 20, qrbox: {width: 300, height: 100}},
+              /* verbose= */ false);
+          html5QrcodeScanner.render((decodedText, decodedResult) => {
+              this.inputID = decodedText;
+          }, onScanFailure);
+      }
+  },
+
+
+  methods:{
+     addDigit(digit){
+      this.$refs.input.focus();
+      if (digit === 'clear') {
+          this.inputID = this.inputID.slice(0, -1);
+      } else if (digit === 'clear all') {
+          this.inputID = '';
+      } else if (digit === 'submit'){
+          if (this.inputID === "") {
+              alert('Please enter the ID.')
+          } else {
+              this.showdata = JSONdata.data.filter(item => item.id.toUpperCase().includes(this.inputID));
+          }
+      } else {
+          this.inputID += digit.toString();
+      }
+    },
+
+  },
+
+  computed:{
+    itemAge(){
+      return (age) => {
+        if (age >= 12) {
+          const years = Math.floor(age / 12)
+          const months = age % 12
+          if (months !== 0){
+            return `${years}y${months}m`
+          }else{
+            return `${years}y`}
+        }else {
+          return `${age}m ${age > 1 ? 's': ''}`
+        }
+      }
+    }
+
   }
+})
   
 </script>
 
@@ -90,16 +122,28 @@ import JSONdata from "./inventory-details.json"
   margin-bottom: 10px;
 }
 
+.basecontainer {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+    margin-top: 10px;
+
+}
+
 .container {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-top: 10px;
+
 }
 
 .input-container {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-top: 10px;
+
 }
 
 .input {
