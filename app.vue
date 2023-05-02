@@ -6,7 +6,7 @@
 
     </div>
     <div class="input-container">
-        <input ref="input" class="input" type="text" v-model="inputID" placeholder="Enter ID" />
+        <input ref="input" class="input" type="tel" v-model="inputID" placeholder="Enter ID" />
     </div>
     <div class="container">
         <div class="digit-panel">
