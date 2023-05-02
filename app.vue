@@ -1,40 +1,18 @@
 <template>
-  <div id="app">
-    <input type="button" value="+" @click="changeclick"> 
-    <!-- <input type="text" v-model="inputID" placeholder="Enter ID" ref="input"> -->
-    <input type="button" value="submit" @click="idsubmit">
-    <span>{{ counter }}</span>
-  </div>
-  <!--
-  <div>
-    <button @click="addDigit(1)"> 1 </button>
-    <button @click="addDigit(2)"> 2 </button>
-    <button @click="addDigit(3)"> 3 </button>
-    <button @click="addDigit(4)"> 4 </button>
-    <button @click="addDigit(5)"> 5 </button>
-    <button @click="addDigit(6)"> 6 </button>
-    <button @click="addDigit(7)"> 7 </button>
-    <button @click="addDigit(8)"> 8 </button>
-    <button @click="addDigit(9)"> 9 </button>
-    <button @click="addDigit(0)"> 0 </button>
-    <button @click="clearInput"> del </button>
-    <button @click="clearAllInput"> del all </button>
-  </div>
-  -->
+    <div id="app">
+        <!-- <input type="button" value="+" @click="changeclick"> -->
+        <!-- <input type="text" v-model="inputID" placeholder="Enter ID" ref="input"> -->
+        <!--<span>{{ counter }}</span>-->
 
+    </div>
+    <div class="input-container">
+        <input ref="input" class="input" type="text" v-model="inputID" placeholder="Enter ID" />
+    </div>
     <div class="container">
-        <div class="input-container">
-            <input ref="input" class="input" type="text" v-model="inputID" placeholder="Enter ID" />
-            <div class="clear-btn-container">
-                <button class="clear-btn" @click="clearAllInput">clear all</button>
-                <button class="clear-btn" @click="clearInput">clear</button>
-            </div>
-        </div>
         <div class="digit-panel">
             <button class="digit" v-for="digit in digits" :key="digit" @click="addDigit(digit)">{{ digit }}</button>
         </div>
     </div>
-
 
     <div>
     <h3> Items: </h3>
@@ -60,39 +38,29 @@ import JSONdata from "./inventory-details.json"
         counter:0,
         showdata:"",
         inputID:"",
-        digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+        digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 'clear', 0, 'clear all', 'submit']
       }
     },
 
     methods:{
-      idsubmit(){
-        if (this.inputID === "") {
-           alert('Please enter the ID.')
+      addDigit(digit){
+        this.$refs.input.focus();
+        if (digit === 'clear') {
+            this.inputID = this.inputID.slice(0, -1);
+        } else if (digit === 'clear all') {
+            this.inputID = '';
+        } else if (digit === 'submit'){
+            if (this.inputID === "") {
+                alert('Please enter the ID.')
+            } else {
+                this.showdata = JSONdata.data.filter(item => item.id.toUpperCase().includes(this.inputID));
+            }
         } else {
-          this.showdata = JSONdata.data.filter(item => item.id.toUpperCase().includes(this.inputID));
+            this.inputID += digit.toString();
         }
       },
 
-      addDigit(digit){
-        this.$refs.input.focus();
-        this.inputID += digit.toString();
-      },
-
-      clearInput() {
-        this.$refs.input.focus();
-        this.inputID = this.inputID.slice(0, -1);
-      },
-
-      clearAllInput() {
-        this.$refs.input.focus();
-        this.inputID = '';
-      }
-
-      // showdatafront(){
-      //   this.showdata = JSONdata.data.filter(item => item.id.toUpperCase().includes("UNG137"));
-      // }
     },
-      // test
 
     computed:{
       itemAge(){
@@ -125,6 +93,7 @@ import JSONdata from "./inventory-details.json"
 .container {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .input-container {
@@ -139,19 +108,6 @@ import JSONdata from "./inventory-details.json"
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-right: 10px;
-}
-
-.clear-btn:hover {
-    background-color: #d32f2f;
-}
-
-.clear-btn-container {
-    display: flex;
-    align-items: center;
-}
-
-.clear-btn {
-    margin-left: 8px;
 }
 
 .digit-panel {
