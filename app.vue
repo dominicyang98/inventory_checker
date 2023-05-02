@@ -1,5 +1,5 @@
 <template>
-    <div id="header" style="background-color:lightblue; text-align:center">Inventory Management</div>
+    <div id="header" style="background-color:lightblue; text-align:center">Inventory Management I</div>
     <div id="reader" width="400px"></div>
 
     <div class="basecontainer">
@@ -39,7 +39,7 @@ import JSONdata from "./inventory-details.json"
 function onScanSuccess(decodedText, decodedResult) {
     // handle the scanned code as you like, for example:
     if (!consoleOutput[message]) {
-        message = decodedResult;
+        // message = decodedResult;
         consoleOutput[message] = true;
         console.log(message)
         //console.log(`Code matched = ${decodedText}`, message);
