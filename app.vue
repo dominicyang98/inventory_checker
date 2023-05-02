@@ -1,6 +1,6 @@
 <template>
     <div id="header" style="background-color:lightblue; text-align:center">Inventory Management I</div>
-    <div id="reader" width="400px"></div>
+    <div id="reader"></div>
 
     <div class="basecontainer">
       <div class="input-container">
@@ -40,9 +40,10 @@ function onScanSuccess(decodedText, decodedResult) {
     // handle the scanned code as you like, for example:
     if (!consoleOutput[message]) {
         // test
-        // message = decodedResult;
-        consoleOutput[message] = true;
-        console.log(message)
+        var msg;
+        msg = decodedResult;
+        consoleOutput[msg] = true;
+        console.log(msg)
         //console.log(`Code matched = ${decodedText}`, message);
     }
 }
@@ -70,6 +71,7 @@ export default (await import('vue')).defineComponent({
               /* verbose= */ false);
           html5QrcodeScanner.render((decodedText, decodedResult) => {
               this.inputID = decodedText;
+              console.log(decodedResult)
           }, onScanFailure);
       }
   },
