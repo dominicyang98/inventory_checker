@@ -1,6 +1,6 @@
 <template>
     <div id="header" style="background-color:lightblue; text-align:center">Inventory Management I</div>
-    <div id="reader" width="400px"></div>
+    <div id="reader"></div>
 
     <div class="basecontainer">
       <div class="input-container">
