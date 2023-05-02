@@ -39,6 +39,7 @@ import JSONdata from "./inventory-details.json"
 function onScanSuccess(decodedText, decodedResult) {
     // handle the scanned code as you like, for example:
     if (!consoleOutput[message]) {
+        // test
         // message = decodedResult;
         consoleOutput[message] = true;
         console.log(message)
