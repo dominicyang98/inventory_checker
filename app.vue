@@ -55,6 +55,7 @@ function onScanFailure(error) {
 }
 
 export default (await import('vue')).defineComponent({
+//export default {
   data(){
     return{
       showdata:"",
