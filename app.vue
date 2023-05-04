@@ -67,7 +67,7 @@ export default (await import('vue')).defineComponent({
       if (process.client) {
           let html5QrcodeScanner = new Html5QrcodeScanner(
               "reader",
-              {fps: 20, qrbox: {width: 300, height: 100}},
+              {fps: 30, qrbox: {width: 300, height: 100}},
               /* verbose= */ false);
           html5QrcodeScanner.render((decodedText, decodedResult) => {
               this.inputID = decodedText;
