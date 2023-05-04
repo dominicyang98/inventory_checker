@@ -1,5 +1,5 @@
 <template>
-    <div id="header" style="background-color:lightblue; text-align:center">Inventory Management I</div>
+    <div id="header" style="background-color:lightblue; text-align:center">Inventory Management FPS30</div>
     <div id="reader"></div>
 
     <div class="basecontainer">
