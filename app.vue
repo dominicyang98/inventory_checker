@@ -42,7 +42,7 @@ export default (await import('vue')).defineComponent({
   },
 
   methods:{
-    addsubmit(submit){
+    addsubmit(){
         if (this.inputID === "") {
             alert('Please enter the ID.')
         } else {
@@ -111,14 +111,4 @@ export default (await import('vue')).defineComponent({
     margin-right: 10px;
 }
 
-.digit-panel {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.digit {
-    flex: 1 0 calc(33.33% - 10px);
-    margin: 5px;
-    text-align: center;
-}
 </style>
