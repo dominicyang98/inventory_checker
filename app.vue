@@ -1,5 +1,5 @@
 <template>
-    <div id="header" style="background-color:lightblue; text-align:center">Inventory Management FPS30</div>
+    <div id="header" style="background-color:lightblue; text-align:center">Inventory Management</div>
     <div id="reader"></div>
 
     <div class="basecontainer">
@@ -10,9 +10,7 @@
 
     <div class="basecontainer">
       <div class="container">
-          <div class="digit-panel">
-              <button class="digit" v-for="digit in digits" :key="digit" @click="addDigit(digit)">{{ digit }}</button>
-          </div>
+          <button @click="addsubmit">search</button>
       </div>
     </div>
 
@@ -33,68 +31,24 @@
 </template>
 
 <script>
-import {Html5QrcodeScanner} from "html5-qrcode";
 import JSONdata from "./inventory-details.json"
-
-function onScanSuccess(decodedText, decodedResult) {
-    // handle the scanned code as you like, for example:
-    if (!consoleOutput[message]) {
-        // test
-        var msg;
-        msg = decodedResult;
-        consoleOutput[msg] = true;
-        console.log(msg)
-        //console.log(`Code matched = ${decodedText}`, message);
-    }
-}
-
-function onScanFailure(error) {
-    // handle scan failure, usually better to ignore and keep scanning.
-    // for example:
-    console.warn(`Code scan error = ${error}`);
-}
 
 export default (await import('vue')).defineComponent({
   data(){
     return{
       showdata:"",
       inputID:"",
-      digits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 'clear', 0, 'clear all', 'submit']
     }
   },
 
-  mounted() {
-      if (process.client) {
-          let html5QrcodeScanner = new Html5QrcodeScanner(
-              "reader",
-              {fps: 30, qrbox: {width: 300, height: 100}},
-              /* verbose= */ false);
-          html5QrcodeScanner.render((decodedText, decodedResult) => {
-              this.inputID = decodedText;
-              console.log(decodedResult)
-          }, onScanFailure);
-      }
-  },
-
-
   methods:{
-     addDigit(digit){
-      this.$refs.input.focus();
-      if (digit === 'clear') {
-          this.inputID = this.inputID.slice(0, -1);
-      } else if (digit === 'clear all') {
-          this.inputID = '';
-      } else if (digit === 'submit'){
-          if (this.inputID === "") {
-              alert('Please enter the ID.')
-          } else {
-              this.showdata = JSONdata.data.filter(item => item.id.toUpperCase().includes(this.inputID));
-          }
-      } else {
-          this.inputID += digit.toString();
-      }
-    },
-
+    addsubmit(submit){
+        if (this.inputID === "") {
+            alert('Please enter the ID.')
+        } else {
+            this.showdata = JSONdata.data.filter(item => item.id.toUpperCase().includes(this.inputID));
+        }
+    }
   },
 
   computed:{
