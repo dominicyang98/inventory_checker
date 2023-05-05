@@ -62,7 +62,7 @@ export default (await import('vue')).defineComponent({
           }else{
             return `${years}y`}
         }else {
-          return `${age}m ${age > 1 ? 's': ''}`
+          return `${age}m`
         }
       }
     }
